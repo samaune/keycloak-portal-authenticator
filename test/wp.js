@@ -1,4 +1,4 @@
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const wordpress_login = async (username, password, ) => {
   const tokenUrl = `https://www.singha.local/wp-json/jwt-auth/v1/token`;
 
@@ -9,18 +9,18 @@ const wordpress_login = async (username, password, ) => {
   try {
     //const response = await axios.post(tokenUrl, params, {
     const response = await fetch(tokenUrl, {
-      agent: agent,
+      
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: {
+      body:JSON.stringify({
         username: username,
         password: password,
-      },
+      }),
     });
     const data = await response.json();
-    console.log('Access Token:', data.access_token);
+    console.log('Access Token:', data);
     return data.access_token;
   } catch (error) {
     console.log(error);
