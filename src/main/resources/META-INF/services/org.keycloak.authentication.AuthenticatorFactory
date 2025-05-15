@@ -1,1 +1,2 @@
-io.github.samaune.keycloak.UsernamePasswordAttributeFormFactory
+com.samaune.CustomUsernamePasswordFormFactory
+com.samaune.CustomValidatePassword

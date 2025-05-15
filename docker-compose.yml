@@ -1,24 +1,21 @@
-version: '3'
-
 services:
-  keycloak:
-    container_name: keycloak
-    image: quay.io/keycloak/keycloak:24.0.1
-    entrypoint: [ "/opt/keycloak/bin/kc.sh", "--verbose", "start-dev", "--import-realm" ]
+  sso:
+    image: quay.io/keycloak/keycloak:26.2
+    command: start-dev
+    env_file: .env
     environment:
-      DEBUG: 'true'
-      DEBUG_PORT: '*:8787'
-      KC_PROXY: edge
-      KC_HTTP_PORT: 8080
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      # KC_PROXY_HEADERS: "xforwarded"
+      # KC_HOSTNAME: "https://sso.localhost"
+      APP_AUTH_URL: "http://localhost:3000/api/auth"
+      KC_HOSTNAME_STRICT: "false"
+      KC_DB: mssql
+      KC_DB_URL: "jdbc:sqlserver://${DB_HOST};databaseName=${KC_DB_NAME};user=${KC_DB_USERNAME};password=${KC_DB_PASSWORD};trustServerCertificate=true;encrypt=false;"
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
     volumes:
       - type: bind
-        source: ./target
+        source: ./providers
         target: /opt/keycloak/providers
-      - type: bind
-        source: ./dev-realm.json
-        target: /opt/keycloak/data/import/dev-realm.json
     ports:
-      - '8080:8080'
-      - '8787:8787'
+      - "8080:8080"
