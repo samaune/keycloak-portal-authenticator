@@ -1,7 +1,7 @@
 services:
   sso:
-    image: quay.io/keycloak/keycloak:26.2
-    command: start-dev
+    image: quay.io/keycloak/keycloak:26.3
+    command: ["start-dev", "--log-level=debug"]
     env_file: .env
     environment:
       KC_HTTP_ENABLED: "true"
@@ -18,4 +18,5 @@ services:
         source: ./providers
         target: /opt/keycloak/providers
     ports:
+
       - "8080:8080"
